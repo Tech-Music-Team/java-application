@@ -21,7 +21,7 @@ public class ConexaoBanco {
             String password = System.getenv().getOrDefault("DB_PASSWORD", "p0o9i8u7");
 
             BasicDataSource basicDataSource = new BasicDataSource();
-            basicDataSource.setUrl("jdbc:mysql://localhost:/tech_music");
+            basicDataSource.setUrl(url);
             basicDataSource.setUsername("root");
             basicDataSource.setPassword("p0o9i8u7");
 
