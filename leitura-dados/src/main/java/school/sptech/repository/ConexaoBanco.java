@@ -22,8 +22,8 @@ public class ConexaoBanco {
 
             BasicDataSource basicDataSource = new BasicDataSource();
             basicDataSource.setUrl(url);
-            basicDataSource.setUsername("root");
-            basicDataSource.setPassword("p0o9i8u7");
+            basicDataSource.setUsername(username);
+            basicDataSource.setPassword(password);
 
             this.jdbcTemplate = new JdbcTemplate(basicDataSource);
             Logger.info(ConexaoBanco.class.getPackageName().toString(), ConexaoBanco.class.getName().toString(), "Conexão criado em: " + url);

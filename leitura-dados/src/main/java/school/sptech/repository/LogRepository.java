@@ -13,8 +13,7 @@ public class LogRepository {
 
     public void inserir(Log logEntry) {
         jdbcTemplate.update(
-            "INSERT INTO log (fk_usuario, data_hora, nivel, aplicacao, modulo, classe, mensagem) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            null,  // Depois insiro o id do Java no banco
+            "INSERT INTO log (data_hora, nivel, aplicacao, modulo, classe, mensagem) VALUES (?, ?, ?, ?, ?, ?)",
             logEntry.getDataHora(),
             logEntry.getNivel().name(),
             logEntry.getAplicacao(),
