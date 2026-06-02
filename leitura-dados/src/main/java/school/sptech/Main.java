@@ -19,7 +19,7 @@ public class Main {
     public static void main(String[] args) {
         S3Service s3Service = new S3Service(new S3Provider());
         String bucketName = "tech-music-raw";
-        Boolean isDev = true;
+        Boolean isDev = false;
 
         try {
             ConexaoBanco conexaoBanco = new ConexaoBanco();
