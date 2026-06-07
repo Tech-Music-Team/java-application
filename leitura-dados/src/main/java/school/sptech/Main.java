@@ -35,6 +35,9 @@ public class Main {
             Logger.info(Main.class.getPackageName(), Main.class.getName(),
                     "========================================");
 
+            // ===== ENVIO DE E-MAILS DE LEMBRETE =====
+            enviarEmailsLembrete(conexaoBanco);
+
             if (!isDev) {
                 // ===== MODO PRODUÇÃO: S3 =====
                 try {
@@ -101,9 +104,6 @@ public class Main {
                     throw e;
                 }
             }
-
-            // ===== ENVIO DE E-MAILS DE LEMBRETE =====
-            enviarEmailsLembrete(conexaoBanco);
 
             Logger.info(Main.class.getPackageName(), Main.class.getName(),
                     "========================================");
