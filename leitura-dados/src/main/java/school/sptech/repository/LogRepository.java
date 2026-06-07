@@ -1,14 +1,11 @@
 package school.sptech.repository;
 
 import school.sptech.entities.Log;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-public class LogRepository {
-
-    private final JdbcTemplate jdbcTemplate;
+public class LogRepository extends RepositoryBase {
 
     public LogRepository(ConexaoBanco conexaoBanco) {
-        this.jdbcTemplate = conexaoBanco.getJdbcTemplate();
+        super(conexaoBanco);
     }
 
     public void inserir(Log logEntry) {

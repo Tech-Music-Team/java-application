@@ -25,11 +25,6 @@ public class MusicaDataExtractor {
     private static final int COL_COMMENTS = 16;
     private static final int COL_STREAMS = 17;
 
-    /**
-     * Extrai dados de música de uma linha do Excel
-     * @param row linha do Excel
-     * @return Map com dados da música (trackId, streams, title, features, etc)
-     */
     public static Map<String, Object> extrairDados(Row row) {
         Map<String, Object> dados = new HashMap<>();
 

@@ -2,16 +2,12 @@ package school.sptech.repository;
 
 import school.sptech.entities.Musica;
 import school.sptech.entities.Logger;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 
-public class MusicaRepository {
-
-    private final JdbcTemplate jdbcTemplate;
+public class MusicaRepository extends RepositoryBase {
 
     public MusicaRepository(ConexaoBanco conexaoBanco) {
-        this.jdbcTemplate = conexaoBanco.getJdbcTemplate();
+        super(conexaoBanco);
     }
 
     public void inserir(Musica musica) {

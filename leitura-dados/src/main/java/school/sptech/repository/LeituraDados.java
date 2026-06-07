@@ -12,8 +12,8 @@ import school.sptech.utils.extractor.ArtistaDataExtractor;
 import school.sptech.utils.extractor.MusicaDataExtractor;
 import school.sptech.utils.validator.ArtistaValidator;
 import school.sptech.utils.validator.MusicaValidator;
+import school.sptech.exception.TechMusicException;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +54,9 @@ public class LeituraDados {
                     "Leitura concluída: " + linhasProcessadas + " linhas processadas, " 
                     + linhasIgnoradas + " duplicadas/inválidas ignoradas");
 
-            return musicaDedup.obterTodas();
+            return musicaDedup.obterTodos();
 
-        } catch (IOException e) {
+        } catch (TechMusicException e) {
             Logger.error(LeituraDados.class.getPackageName(), LeituraDados.class.getName(), 
                     "Erro ao ler arquivo Excel: " + e.getMessage());
             return new ArrayList<>();

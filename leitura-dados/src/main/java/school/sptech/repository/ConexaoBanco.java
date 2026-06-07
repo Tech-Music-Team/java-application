@@ -3,17 +3,18 @@ package school.sptech.repository;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import school.sptech.entities.Logger;
+import school.sptech.exception.TechMusicException;
 
 
 public class ConexaoBanco {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public ConexaoBanco() {
+    public ConexaoBanco() throws TechMusicException {
         Logger.info(ConexaoBanco.class.getPackageName().toString(), ConexaoBanco.class.getName().toString(), "Iniciando conexão com banco de dados");
 
         try {
-            String host = System.getenv().getOrDefault("DB_HOST", "localhost");
+            String host = System.getenv().getOrDefault("DB_HOST", "127.0.0.1");
             String port = System.getenv().getOrDefault("DB_PORT", "3306");
             String database = System.getenv().getOrDefault("DB_DATABASE", "tech_music");
             String url = "jdbc:mysql://" + host + ":" + port + "/" + database;
@@ -29,7 +30,7 @@ public class ConexaoBanco {
             Logger.info(ConexaoBanco.class.getPackageName().toString(), ConexaoBanco.class.getName().toString(), "Conexão criado em: " + url);
         } catch (Exception e) {
             Logger.error(ConexaoBanco.class.getPackageName().toString(), ConexaoBanco.class.getName().toString(), "Falha ao conectar: " + e.getMessage());
-            throw new RuntimeException(e);
+            throw new TechMusicException("Falha ao conectar ao banco de dados", e);
         }
     }
 

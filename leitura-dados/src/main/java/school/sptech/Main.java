@@ -8,11 +8,11 @@ import school.sptech.repository.LeituraDados;
 import school.sptech.repository.ConexaoBanco;
 import school.sptech.repository.ArtistaRepository;
 import school.sptech.repository.MusicaRepository;
+import school.sptech.repository.JavaMailRepository;
 import school.sptech.service.S3Service;
+import school.sptech.exception.TechMusicException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 
 public class Main {
@@ -72,14 +72,14 @@ public class Main {
                     // Validar existência do arquivo
                     File arquivo = new File(caminhoLocal);
                     if (!arquivo.exists()) {
-                        throw new FileNotFoundException(
+                        throw new TechMusicException(
                                 "Arquivo não encontrado em: " + arquivo.getAbsolutePath() +
                                         "\nCertifique-se de que o arquivo 'data_base.xlsx' existe no diretório 'data'"
                         );
                     }
 
                     if (!arquivo.canRead()) {
-                        throw new IOException(
+                        throw new TechMusicException(
                                 "Permissão negada: Não é possível ler o arquivo em " + arquivo.getAbsolutePath()
                         );
                     }
@@ -89,16 +89,10 @@ public class Main {
 
                     executarFluxoETL(caminhoLocal, conexaoBanco);
 
-                } catch (FileNotFoundException e) {
-                    Logger.error(Main.class.getPackageName(), Main.class.getName(),
-                            "ERRO: Arquivo de dados não encontrado - " + e.getMessage());
-                    System.err.println("[DESENVOLVIMENTO] Verifique se 'data/data_base.xlsx' existe");
-                    System.exit(1);
-
-                } catch (IOException e) {
+                } catch (TechMusicException e) {
                     Logger.error(Main.class.getPackageName(), Main.class.getName(),
                             "ERRO: Problema ao acessar arquivo local - " + e.getMessage());
-                    System.err.println("[DESENVOLVIMENTO] Verifique as permissões do arquivo");
+                    System.err.println("[DESENVOLVIMENTO] Verifique se 'data_base_updated.xlsx' existe e tem permissão de leitura");
                     System.exit(1);
 
                 } catch (Exception e) {
@@ -107,6 +101,9 @@ public class Main {
                     throw e;
                 }
             }
+
+            // ===== ENVIO DE E-MAILS DE LEMBRETE =====
+            enviarEmailsLembrete(conexaoBanco);
 
             Logger.info(Main.class.getPackageName(), Main.class.getName(),
                     "========================================");
@@ -174,6 +171,22 @@ public class Main {
             Logger.error(Main.class.getPackageName(), Main.class.getName(),
                     "Erro ao processar dados: " + e.getMessage());
             throw e;
+        }
+    }
+
+    private static void enviarEmailsLembrete(ConexaoBanco conexaoBanco) {
+        Logger.info(Main.class.getPackageName(), Main.class.getName(),
+                "===== ENVIO DE E-MAILS DE LEMBRETE =====");
+
+        try {
+            JavaMailRepository javaMailRepository = new JavaMailRepository(conexaoBanco);
+            javaMailRepository.enviarEmails();
+
+            Logger.info(Main.class.getPackageName(), Main.class.getName(),
+                    "Envio de e-mails de lembrete concluído");
+        } catch (Exception e) {
+            Logger.error(Main.class.getPackageName(), Main.class.getName(),
+                    "Erro ao enviar e-mails de lembrete: " + e.getMessage());
         }
     }
 

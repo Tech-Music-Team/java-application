@@ -3,15 +3,12 @@ package school.sptech.repository;
 import school.sptech.entities.Artista;
 import school.sptech.entities.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 
-public class ArtistaRepository {
-
-    private final JdbcTemplate jdbcTemplate;
+public class ArtistaRepository extends RepositoryBase {
 
     public ArtistaRepository(ConexaoBanco conexaoBanco) {
-        this.jdbcTemplate = conexaoBanco.getJdbcTemplate();
+        super(conexaoBanco);
     }
 
     public void inserir(Artista artista) {

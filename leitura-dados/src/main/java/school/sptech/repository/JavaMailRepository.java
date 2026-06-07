@@ -1,6 +1,6 @@
 package school.sptech.repository;
 
-import org.springframework.jdbc.core.JdbcTemplate;
+import school.sptech.exception.TechMusicException;
 import school.sptech.service.JavaMail;
 
 import javax.mail.MessagingException;
@@ -9,11 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class JavaMailRepository {
-    private final JdbcTemplate jdbcTemplate;
+public class JavaMailRepository extends RepositoryBase {
 
     public JavaMailRepository(ConexaoBanco conexaoBanco) {
-        this.jdbcTemplate = conexaoBanco.getJdbcTemplate();
+        super(conexaoBanco);
     }
 
 
@@ -26,11 +25,9 @@ public class JavaMailRepository {
     }
 
     public List<List<String>> getInformacoesEnvioEmail() {
-        JavaMailRepository javaMailRepository = new JavaMailRepository(new ConexaoBanco());
-
         List<List<String>> emails = new ArrayList<>();
 
-        for (Map<String, Object> stringObjectMap : javaMailRepository.getEmailsJavaMail()) {
+        for (Map<String, Object> stringObjectMap : getEmailsJavaMail()) {
 
             if (LocalDate.now().plusDays(1).isEqual(LocalDate.parse(stringObjectMap.get("data_evento").toString()))) {
                 List<String> infos = new ArrayList<>();
@@ -50,14 +47,18 @@ public class JavaMailRepository {
     }
 
 
-    public void enviarEmails() {
+    public void enviarEmails() throws TechMusicException {
         JavaMail emailSender = new JavaMail();
 
         List<List<String>> informacoesEnvioEmail = getInformacoesEnvioEmail();
 
         for (List<String> strings : informacoesEnvioEmail) {
+            String nomeEvento = strings.get(2);
+            String assunto = "Seu evento é amanhã!!";
+            String corpoHtml = JavaMail.montarTemplateLembrete(nomeEvento);
+
             try {
-                emailSender.sendEmail(strings.get(0), "Seu evento é amanha!!", "O evento: "+ strings.get(2) + "acontecerá amanhã!! Fique atento!");
+                emailSender.sendEmail(strings.get(0), assunto, corpoHtml);
                 System.out.println("E-mail enviado com sucesso!");
             } catch (MessagingException e) {
                 e.printStackTrace();
@@ -65,7 +66,7 @@ public class JavaMailRepository {
 
             if (strings.get(1) != null) {
                 try {
-                    emailSender.sendEmail(strings.get(1), "Seu evento é amanha!!", "O evento: "+ strings.get(2) + "acontecerá amanhã!! Fique atento!");
+                    emailSender.sendEmail(strings.get(1), assunto, corpoHtml);
                     System.out.println("E-mail enviado com sucesso!");
                 } catch (MessagingException e) {
                     e.printStackTrace();
